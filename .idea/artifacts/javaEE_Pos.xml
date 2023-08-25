@@ -10,6 +10,7 @@
         </element>
         <element id="directory" name="classes">
           <element id="module-output" name="Back_End" />
+          <element id="module-output" name="Front_End" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="Back_End/web/Web" />

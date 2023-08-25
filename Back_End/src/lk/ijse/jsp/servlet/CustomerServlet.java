@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
 
-@WebServlet(urlPatterns = {"/pages/customer"})
+@WebServlet(urlPatterns = {"/SPA/cus"})
 public class CustomerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -24,6 +24,7 @@ public class CustomerServlet extends HttpServlet {
             PrintWriter writer = resp.getWriter ();
             resp.addHeader ("Content-Type", "application/json");
             resp.addHeader ("Access-Control-Allow-Origin", "*");
+
 
             JsonArrayBuilder allCustomer = Json.createArrayBuilder ();
 
@@ -50,5 +51,13 @@ public class CustomerServlet extends HttpServlet {
         } catch (SQLException e) {
             throw new RuntimeException (e);
         }
+    }
+    @Override
+    protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //preflight
+        resp.addHeader ("Access-Control-Allow-Origin", "*");
+        resp.addHeader ("Access-Control-Allow-Methods", "PUT");
+        resp.addHeader ("Access-Control-Allow-Methods", "DELETE");
+        resp.addHeader ("Access-Control-Allow-Headers", "Content-Type");
     }
 }
