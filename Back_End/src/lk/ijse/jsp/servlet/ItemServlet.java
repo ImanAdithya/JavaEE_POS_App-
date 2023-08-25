@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
 
-@WebServlet(urlPatterns = {"/itemPos"})
+@WebServlet(urlPatterns = {"/SPA/item"})
 public class ItemServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -30,8 +30,8 @@ public class ItemServlet extends HttpServlet {
             while (rst.next ()) {
                 String id = rst.getString (1);
                 String des = rst.getString (2);
-                String up = rst.getString (3);
-                String qty = (rst.getString (4));
+                double up = rst.getDouble (3);
+                int qty = rst.getInt (4);
 
                 JsonObjectBuilder item = Json.createObjectBuilder ();
 
@@ -42,6 +42,7 @@ public class ItemServlet extends HttpServlet {
 
                 allItem.add (item.build ());
             }
+
             writer.print (allItem.build ());
 
         } catch (ClassNotFoundException e) {
