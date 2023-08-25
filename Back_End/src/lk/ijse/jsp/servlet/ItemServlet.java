@@ -1,8 +1,6 @@
 package lk.ijse.jsp.servlet;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -86,6 +84,86 @@ public class ItemServlet extends HttpServlet {
             }
         } catch (SQLException | ClassNotFoundException e) {
 
+            resp.addHeader("Content-Type","application/json");
+            JsonObjectBuilder obj=Json.createObjectBuilder ();
+            obj.add ("state","");
+            obj.add ("massage",e.getMessage ());
+            obj.add ("data","");
+            resp.setStatus (400);
+            writer.print(obj.build());
+        }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        JsonReader reader = Json.createReader (req.getReader ());
+        JsonObject jsonObject = reader.readObject ();
+
+        String itemID=jsonObject.getString ("id");
+        String itemDes=jsonObject.getString ("des");
+        String itemUp =jsonObject.getString ("up");
+        String itemQty=jsonObject.getString ("qty");
+
+
+        PrintWriter writer = resp.getWriter ();
+
+        resp.addHeader ("Access-Control-Allow-Origin", "*");
+        try {
+
+            Class.forName ("com.mysql.cj.jdbc.Driver");
+            Connection connection = DriverManager.getConnection ("jdbc:mysql://localhost:3306/AjaxJson", "root", "12345678");
+            PreparedStatement pstm3 = connection.prepareStatement ("update Item set ItemName=?,UnitPrice=?,ItemQty=? where ItemCode=?");
+            pstm3.setObject (4, itemID);
+            pstm3.setObject (1, itemDes);
+            pstm3.setObject (2, itemUp);
+            pstm3.setObject (3, itemQty);
+            if (pstm3.executeUpdate () > 0) {
+                resp.addHeader("Content-Type","application/json");
+                JsonObjectBuilder cussAdd=Json.createObjectBuilder ();
+                cussAdd.add ("state","200");
+                cussAdd.add ("massage"," Item Updated Succuss");
+                cussAdd.add ("data","");
+                resp.setStatus (200);
+                writer.print(cussAdd.build());
+            } else {
+                throw new SQLException ();
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            resp.addHeader("Content-Type","application/json");
+            JsonObjectBuilder obj=Json.createObjectBuilder ();
+            obj.add ("state","");
+            obj.add ("massage",e.getMessage ());
+            obj.add ("data","");
+            resp.setStatus (400);
+            writer.print(obj.build());
+        }
+
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        String cusID=req.getParameter ("id");
+        PrintWriter writer = resp.getWriter ();
+
+        resp.addHeader ("Access-Control-Allow-Origin", "*");
+        try {
+            Class.forName ("com.mysql.cj.jdbc.Driver");
+            Connection connection = DriverManager.getConnection ("jdbc:mysql://localhost:3306/AjaxJson", "root", "12345678");
+            PreparedStatement pstm2 = connection.prepareStatement ("delete from item where ItemCode=?");
+            pstm2.setObject (1, cusID);
+            if (pstm2.executeUpdate () > 0) {
+                resp.addHeader("Content-Type","application/json");
+                JsonObjectBuilder cussAdd=Json.createObjectBuilder ();
+                cussAdd.add ("state","200");
+                cussAdd.add ("massage"," Item Deleted Succuss");
+                cussAdd.add ("data","");
+                resp.setStatus (200);
+                writer.print(cussAdd.build());
+            }
+        } catch (SQLException | ClassNotFoundException e) {
             resp.addHeader("Content-Type","application/json");
             JsonObjectBuilder obj=Json.createObjectBuilder ();
             obj.add ("state","");
