@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Manage</title>
+    <meta content="width=device-width initial-scale=1" name="viewport">
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/css/styles.css" rel="stylesheet">
+    <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" rel="stylesheet">
+    <style>
+        ul > li {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<!--header-->
+<header class="jumbotron bg-primary text-white p-3">
+    <h1 class="position-absolute" id="nav"></h1>
+    <ul class="list-group list-group-horizontal text-danger justify-content-end font-weight-bold">
+        <li class="list-group-item bg-white" id="lnkHome"><a href="">Home</a></li>
+        <li class="list-group-item bg-danger text-white" id="lnkCustomer"><a class="text-white"
+                                                                             href="">Customer</a>
+        </li>
+        <li class="list-group-item bg-white" id="lnkItem"><a href="">Item</a></li>
+        <li class="list-group-item bg-white" id="lnkOrders"><a href="">Orders</a></li>
+    </ul>
+</header>
+
+<!--customer content-->
+<main class="container-fluid" id="customerContent">
+    <section class="row">
+        <div class="col-12 col-lg-4">
+            <h1>ITEM MANAGEMENT</h1>
+            <form id="ItemForm">
+                <div class="form-group">
+                    <label for="txtItemID">ITEM ID</label>
+                    <input name="itemID" class="form-control" id="txtItemID" type="text">
+                    <span class="control-error" id="lblItemID"></span>
+                </div>
+                <div class="form-group">
+                    <label for="txtItemDes">ITEM DESCRIPTION</label>
+                    <input name="itemDes" class="form-control" id="txtItemDes" type="text">
+                    <span class="control-error" id="lblItemDes"></span>
+                </div>
+                <div class="form-group">
+                    <label for="txtItemUnitPrice">ITEM UNIT PRICE</label>
+                    <input name="unitPrice" class="form-control" id="txtItemUnitPrice" type="text">
+                    <span class="control-error" id="lblUnitPrice"></span>
+                </div>
+                <div class="form-group">
+                    <label for="txtItemQty">ITEM QTY</label>
+                    <input name="itemQty" class="form-control" id="txtItemQty" type="text">
+                    <span class="control-error" id="lblItemQty"></span>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary" id="btnSaveItem">
+                        Save Item
+                    </button>
+                    <button type="button" class="btn btn-danger"
+                            id="btnItemDelete">Remove
+                    </button>
+                    <button type="button" class="btn btn-warning"
+                            id="btnItemUpdate">Update
+                    </button>
+                    <button type="button" class="btn btn-success" id="btnItemGetAll">Get All</button>
+                    <button type="button" class="btn btn-danger" id="btn-clear1">Clear All</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-12 col-lg-8 mt-3">
+            <table class="table table-bordered table-hover">
+                <thead class="bg-danger text-white">
+                <tr>
+                    <th>ITEM ID</th>
+                    <th>ITEM DESCRIPTION</th>
+                    <th>ITEM UPRICE</th>
+                    <th>ITEM QTY</th>
+                </tr>
+                </thead>
+                <tbody id="tblItem">
+
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+
+<script src="../assets/js/jquery-3.6.1.min.js"></script>
+<script src="../assets/js/bootstrap.min.js"></script>
+
+<script>
+    getAllItem();
+    function getAllItem() {
+        $("#tblItem").empty();
+
+        $.ajax({
+            url: 'http://localhost:8080/json_ajax/pages/item',
+            method: 'get',
+            success:function (item) {
+                for (let i in item) {
+                    let It = item[i];
+                    let id = It.itemId;
+                    let des = It.itemDes;
+                    let up = It.itemUp;
+                    let qty=It.itemQty;
+                    let row=`<tr><td>${id}</td><td>${des}</td><td>${up}</td><td>${qty}</td></tr>`;
+                    $("#tblItem").append(row);
+                }
+            },
+            error:function (err) {
+                alert("ERROR LOAD DATA")
+            }
+        });
+    }
+
+    $("#btnItemGetAll").click(function () {
+        getAllItem();
+    });
+
+
+
+    $("#btnSaveItem").click(function () {
+        let formData=$("#ItemForm").serialize();
+        $.ajax({
+            url:'http://localhost:8080/json_ajax/pages/item',
+            method:'post',
+            data:formData,
+            success:function (res) {
+                getAllItem();
+                alert(res.massage);
+            },
+            error:function (err) {
+                alert(e.responseJSON.massage);
+            }
+        });
+    });
+
+    $("#btnItemUpdate").click(function () {
+        let itemId = $("#txtItemID").val();
+        let itemDes = $("#txtItemDes").val();
+        let itemUp = $("#txtItemUnitPrice").val();
+        let itemQty=$("#txtItemQty").val();
+
+        let itemObj={
+            id:itemId,
+            des:itemDes,
+            up:itemUp,
+            qty:itemQty
+        }
+        $.ajax({
+            url:'http://localhost:8080/json_ajax/pages/item',
+            method:'PUT',
+            data: JSON.stringify(itemObj), // Convert the object to JSON string
+            contentType: 'application/json',
+            success:function (res) {
+                alert(res.massage);
+                getAllItem()
+            },
+            error:function (err) {
+                alert(e.responseJSON.massage);
+            }
+        });
+    });
+
+    $("#btnItemDelete").click(function () {
+        let itemID = $("#txtItemID").val();
+        $.ajax({
+            url:'http://localhost:8080/json_ajax/pages/item?id='+itemID,
+            method:'DELETE',
+            success:function () {
+                getAllItem()
+                alert(res.massage);
+            },error:function () {
+                alert(e.responseJSON.massage);
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
