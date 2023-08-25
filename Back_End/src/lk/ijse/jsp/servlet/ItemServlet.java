@@ -52,6 +52,50 @@ public class ItemServlet extends HttpServlet {
         }
 
     }
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String itemID = req.getParameter ("itemID");
+        String itemDes = req.getParameter ("itemDes");
+        Double itemUp = Double.valueOf (req.getParameter ("unitPrice"));
+        int itemQty = Integer.parseInt (req.getParameter ("itemQty"));
+
+        PrintWriter writer = resp.getWriter ();
+
+        resp.addHeader ("Access-Control-Allow-Origin", "*");
+
+        try {
+            Class.forName ("com.mysql.cj.jdbc.Driver");
+            Connection connection = DriverManager.getConnection ("jdbc:mysql://localhost:3306/AjaxJson", "root", "12345678");
+            PreparedStatement pstm = connection.prepareStatement ("insert into item values(?,?,?,?)");
+
+            pstm.setObject (1, itemID);
+            pstm.setObject (2, itemDes);
+            pstm.setObject (3, itemUp);
+            pstm.setObject (4, itemQty);
+            if (pstm.executeUpdate () > 0) {
+
+                resp.addHeader("Content-Type","application/json");
+
+                JsonObjectBuilder cussAdd=Json.createObjectBuilder ();
+                cussAdd.add ("state","200");
+                cussAdd.add ("massage"," Item Added Succuss");
+                cussAdd.add ("data","");
+                resp.setStatus (200);
+                writer.print(cussAdd.build());
+
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+
+            resp.addHeader("Content-Type","application/json");
+            JsonObjectBuilder obj=Json.createObjectBuilder ();
+            obj.add ("state","");
+            obj.add ("massage",e.getMessage ());
+            obj.add ("data","");
+            resp.setStatus (400);
+            writer.print(obj.build());
+        }
+    }
+
 
     @Override
     protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
