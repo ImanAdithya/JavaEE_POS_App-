@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
 
-@WebServlet(urlPatterns = "/placeOrder")
+@WebServlet(urlPatterns = "/SPA/placeOrder")
 public class PlaceOrderServletAPI extends HttpServlet {
 
     @Override
