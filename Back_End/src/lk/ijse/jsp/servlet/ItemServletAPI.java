@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 import java.sql.*;
 
 @WebServlet(urlPatterns = {"/SPA/item"})
-public class ItemServlet extends HttpServlet {
+public class ItemServletAPI extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
