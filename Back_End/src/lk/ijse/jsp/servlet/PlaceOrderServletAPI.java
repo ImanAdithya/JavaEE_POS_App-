@@ -14,57 +14,57 @@ import java.sql.*;
 @WebServlet(urlPatterns = "/SPA/placeOrder")
 public class PlaceOrderServletAPI extends HttpServlet {
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/AjaxJson", "root", "12345678");
-            PreparedStatement pstm = connection.prepareStatement("select * from orders");
-//            PreparedStatement pstm2 = connection.prepareStatement("select * from order_detail");
-            ResultSet rst = pstm.executeQuery();
-//            ResultSet rst2 = pstm2.executeQuery();
-            PrintWriter writer = resp.getWriter();
-            resp.addHeader("Access-Control-Allow-Origin","*");
-            resp.addHeader("Content-Type","application/json");
-
-            JsonArrayBuilder allCustomers = Json.createArrayBuilder();
-
-
-            while (rst.next()) {
-                String orderID = rst.getString(1);
-                String orderCusID = rst.getString(2);
-                String orderDate = rst.getString(3);
-//                String orderTotal = String.valueOf(rst.getInt(4));
-
-                JsonObjectBuilder customer = Json.createObjectBuilder();
-
-                customer.add("orderID",orderID);
-                customer.add("orderCusID",orderCusID);
-                customer.add("orderDate",orderDate);
-//                customer.add("contact",contact);
-
-                allCustomers.add(customer.build());
-            }
-
-
-            writer.print(allCustomers.build());
-
-
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    @Override
+//    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        try {
+//            Class.forName("com.mysql.jdbc.Driver");
+//            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/AjaxJson", "root", "12345678");
+//            PreparedStatement pstm = connection.prepareStatement("select * from orders");
+////            PreparedStatement pstm2 = connection.prepareStatement("select * from order_detail");
+//            ResultSet rst = pstm.executeQuery();
+////            ResultSet rst2 = pstm2.executeQuery();
+//            PrintWriter writer = resp.getWriter();
+//            resp.addHeader("Access-Control-Allow-Origin","*");
+//            resp.addHeader("Content-Type","application/json");
+//
+//            JsonArrayBuilder allCustomers = Json.createArrayBuilder();
+//
+//
+//            while (rst.next()) {
+//                String orderID = rst.getString(1);
+//                String orderCusID = rst.getString(2);
+//                String orderDate = rst.getString(3);
+////                String orderTotal = String.valueOf(rst.getInt(4));
+//
+//                JsonObjectBuilder customer = Json.createObjectBuilder();
+//
+//                customer.add("orderID",orderID);
+//                customer.add("orderCusID",orderCusID);
+//                customer.add("orderDate",orderDate);
+////                customer.add("contact",contact);
+//
+//                allCustomers.add(customer.build());
+//            }
+//
+//
+//            writer.print(allCustomers.build());
+//
+//
+//        } catch (ClassNotFoundException e) {
+//            throw new RuntimeException(e);
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         resp.addHeader("Access-Control-Allow-Origin","*");
-        System.out.println("dddddd");
+
         JsonReader reader = Json.createReader(req.getReader());
         JsonObject jsonObject = reader.readObject();
-//        JsonArray jsonArray=reader.readArray();
+
         String oID = jsonObject.getString("oID");
         String oDate = jsonObject.getString("oDate");
         String oCusID = jsonObject.getString("oCusID");
@@ -72,22 +72,11 @@ public class PlaceOrderServletAPI extends HttpServlet {
         String oItemName = jsonObject.getString("oItemName");
         String oUnitPrice = jsonObject.getString("oUnitPrice");
         String oQty = jsonObject.getString("oQty");
+        String qtyOnHand = jsonObject.getString("oQtyOnHand");
         JsonArray oCartItems = jsonObject.getJsonArray("oCartItems");
 
+        //int newQty=Integer.parseInt (qtyOnHand)-Integer.parseInt (oQty);
 
-        System.out.println(oID);
-        System.out.println(oDate);
-        System.out.println(oCusID);
-        System.out.println(oItemID);
-        System.out.println(oItemName);
-        System.out.println(oUnitPrice);
-        System.out.println(oQty);
-        System.out.println(oCartItems);
-
-        for (int i = 0; i < oCartItems.size(); i++) {
-
-            System.out.println(oCartItems.getJsonArray(i).getString(0));
-        }
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -168,7 +157,7 @@ public class PlaceOrderServletAPI extends HttpServlet {
 
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/AjaxJson", "root", "12345678");
 
-            PreparedStatement pstm3 = connection.prepareStatement("update item set qty_on_hnd=? where item_ID=?");
+            PreparedStatement pstm3 = connection.prepareStatement("update item set ItemQty=? where ItemCode=?");
             pstm3.setObject(2, itemID);
             pstm3.setObject(1, newQty);
             if (pstm3.executeUpdate() > 0) {

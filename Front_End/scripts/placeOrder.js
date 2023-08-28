@@ -91,15 +91,11 @@ let finalTotal=0;
 
 $('#btnAddToTable').click(function () {
 
-
-
     let itemCode=$('#txtItemCode').val();
     let itemName=$('#txtItemDescription').val();
     let price=$('#txtItemPrice').val();
     let qty=$('#txtQty').val();
     let total=price*qty;
-
-
 
     let itemCartRow=[];
     itemCartRow.push(itemCode,itemName,price,qty,total);
@@ -111,11 +107,13 @@ $('#btnAddToTable').click(function () {
 
     cartItems.push(itemCartRow);
 
-    for (let i = 0; i <=cartItems.length; i++) {
-        subTotal=subTotal+cartItems[i][4];
-        console.log(cartItems[i][4]);
+    for (let i = 0; i <=itemCartRow.length; i++) {
+        subTotal=subTotal+itemCartRow[4];
+        console.log(itemCartRow[4]);
         $('#txtTotal').val(parseInt(subTotal));
     }
+
+    $('#txtQty').val("");
 });
 
 $('#txtDiscount').keydown(function (event) {
@@ -140,19 +138,20 @@ $('#txtCash').keydown(function (event) {
 
 // ========================================================
 $('#btnSubmitOrder').click(function () {
-    let oID = $('#InputOID').val();
-    let oDate= $('#InputDate').val();
-    let oCusID= $('#selectCusId').val();
-    let oItemID= $('#selectItemId').val();
-    let oItemName= $('#ItemName').val();
-    let oUnitPrice= $('#UnitPrice').val();
-    let oQty= $('#Qty').val();
+    let oID = $('#txtOrderID').val();
+    let oDate= $('#txtDate').val();
+    let oCusID= $('#selectCusID').val();
+    let oItemID= $('#selectItemCode').val();
+    let oItemName= $('#txtItemDescription').val();
+    let oUnitPrice= $('#txtItemPrice').val();
+    let oQty= $('#txtQty').val();
+    let qtyOnHand=$('#txtQTYOnHand').val();
     let oCartItems=cartItems;
 
     console.log(oID,oDate,oCusID,oItemID,oItemName,oUnitPrice,oQty);
     console.log(oCartItems);
 
-    let a = {
+    let order = {
         "oID": oID,
         "oDate": oDate,
         "oCusID": oCusID,
@@ -160,16 +159,17 @@ $('#btnSubmitOrder').click(function () {
         "oItemName": oItemName,
         "oUnitPrice": oUnitPrice,
         "oQty": oQty,
+        "oQtyOnHand":qtyOnHand,
         "oCartItems": oCartItems
     }
 
     $.ajax({
-        url: 'http://localhost:8080/JavaEE_Pos/placeOrder',
+        url: 'http://localhost:8080/javaEE_Pos/SPA/placeOrder',
         method: "post",
         setRequestHeader:"Access-Control-Allow-Origin",
         origin:"*",
         contentType: "application/json",
-        data: JSON.stringify(a),
+        data: JSON.stringify(order),
         success: function (resp) {
             alert(resp.message);
             updateItemQty();
@@ -180,6 +180,12 @@ $('#btnSubmitOrder').click(function () {
             console.log(error.message)
         }
     });
+
+    $('#txtTotal').val("");
+    $('#txtSubTotal').val("");
+    $('#txtCash').val("");
+    $('#txtDiscount').val("");
+    $('#txtBalance').val("");
 
 })
 
@@ -207,12 +213,12 @@ function getAllOrders(){
 }
 
 function updateItemQty() {
-    let itemID =$("#selectItemId").val()
-    let oldQty=$("#QtyOnHnd").val();
-    let buyingQty=$("#Qty").val();
+    let itemID =$("#selectItemCode").val()
+    let oldQty=$("#txtQTYOnHand").val();
+    let buyingQty=$("#txtQty").val();
     let newQty=(oldQty-buyingQty).toString();
 
-    let b = {
+    let updateItem = {
         "itemID": itemID,
         "newQty": newQty,
     }
@@ -224,7 +230,7 @@ function updateItemQty() {
         // header: "Access-Control-Allow-Origin",
         setRequestHeader: "Access-Control-Allow-Origin",
         contentType: "application/json",
-        data: JSON.stringify(b),
+        data: JSON.stringify(updateItem),
         success: function (resp) {
             alert(resp.message);
         },
@@ -232,16 +238,14 @@ function updateItemQty() {
             alert(error.responseJSON.message);
         }
     });
-
-
 }
 
-//search order
-$(document).ready(function(){
-    $("#searchbar").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("#tblOrders tr").filter(function() {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
-    });
-});
+// //search order
+// $(document).ready(function(){
+//     $("#searchbar").on("keyup", function() {
+//         var value = $(this).val().toLowerCase();
+//         $("#tblOrders tr").filter(function() {
+//             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+//         });
+//     });
+// });
