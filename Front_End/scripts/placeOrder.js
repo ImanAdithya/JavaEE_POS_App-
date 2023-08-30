@@ -95,17 +95,15 @@ $('#btnAddToTable').click(function () {
     let itemName=$('#txtItemDescription').val();
     let price=$('#txtItemPrice').val();
     let qty=$('#txtQty').val();
+    let qtyOnHand=$('#txtQTYOnHand').val();
     let total=price*qty;
-
     let itemCartRow=[];
     itemCartRow.push(itemCode,itemName,price,qty,total);
 
-
-
-    let row=`<tr><td>${itemCode}</td><td>${itemName}</td><td>${price}</td><td>${qty}</td><td>${total}</td></tr>`;
+    let row=`<tr><td>${itemCode}</td><td>${itemName}</td><td>${price}</td><td>${qtyOnHand}</td><td>${qty}</td><td>${total}</td></tr>`;
     $("#orderTable").append(row);
 
-    cartItems.push(itemCartRow);
+   // cartItems.push(itemCartRow);
 
     for (let i = 0; i <=itemCartRow.length; i++) {
         subTotal=subTotal+itemCartRow[4];
@@ -136,30 +134,38 @@ $('#txtCash').keydown(function (event) {
     }
 })
 
+function getItemDetails() {
+    let rows = $('#orderTable').children().length;
+    var array = [];
+
+    for (let i = 0; i < rows; i++) {
+        let code = $('#orderTable').children().eq(i).children(":eq(0)").text();
+        let des = $('#orderTable').children().eq(i).children(":eq(1)").text();
+        let price = $('#orderTable').children().eq(i).children(":eq(2)").text();
+        let qtyOnHand = $('#orderTable').children().eq(i).children(":eq(3)").text();
+        let qty = $('#orderTable').children().eq(i).children(":eq(4)").text();
+        array.push({
+            itemCode: code,
+            itemDes: des,
+            itemPrice: price,
+            qtyOnHand: qtyOnHand,
+            qty: qty
+        });
+        return array;
+    }
+}
+
 // ========================================================
 $('#btnSubmitOrder').click(function () {
     let oID = $('#txtOrderID').val();
     let oDate= $('#txtDate').val();
     let oCusID= $('#selectCusID').val();
-    let oItemID= $('#selectItemCode').val();
-    let oItemName= $('#txtItemDescription').val();
-    let oUnitPrice= $('#txtItemPrice').val();
-    let oQty= $('#txtQty').val();
-    let qtyOnHand=$('#txtQTYOnHand').val();
-    let oCartItems=cartItems;
-
-    console.log(oID,oDate,oCusID,oItemID,oItemName,oUnitPrice,oQty);
-    console.log(oCartItems);
+    let oCartItems=getItemDetails();
 
     let order = {
         "oID": oID,
         "oDate": oDate,
         "oCusID": oCusID,
-        "oItemID": oItemID,
-        "oItemName": oItemName,
-        "oUnitPrice": oUnitPrice,
-        "oQty": oQty,
-        "oQtyOnHand":qtyOnHand,
         "oCartItems": oCartItems
     }
 
@@ -171,13 +177,11 @@ $('#btnSubmitOrder').click(function () {
         contentType: "application/json",
         data: JSON.stringify(order),
         success: function (resp) {
-            alert(resp.message);
-            updateItemQty();
-            console.log(resp.message)
+            alert("Order Succuss");
+            console.log(resp.message);
         },
         error: function (error) {
-            alert(error.responseJSON.message);
-            console.log(error.message)
+            console.log(error.message);
         }
     });
 
@@ -208,34 +212,6 @@ function getAllOrders(){
         },
         error: function (error) {
             console.log(error);
-        }
-    });
-}
-
-function updateItemQty() {
-    let itemID =$("#selectItemCode").val()
-    let oldQty=$("#txtQTYOnHand").val();
-    let buyingQty=$("#txtQty").val();
-    let newQty=(oldQty-buyingQty).toString();
-
-    let updateItem = {
-        "itemID": itemID,
-        "newQty": newQty,
-    }
-
-    $.ajax({
-        url: 'http://localhost:8080/JavaEE_Pos/placeOrder',
-        method: 'put',
-        origin: "*",
-        // header: "Access-Control-Allow-Origin",
-        setRequestHeader: "Access-Control-Allow-Origin",
-        contentType: "application/json",
-        data: JSON.stringify(updateItem),
-        success: function (resp) {
-            alert(resp.message);
-        },
-        error: function (error) {
-            alert(error.responseJSON.message);
         }
     });
 }
