@@ -11,10 +11,6 @@
   <component name="ChangeListManager">
     <list default="true" id="141eff2b-bf52-4137-bf6d-365f03ba4aca" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Back_End/src/lk/ijse/jsp/servlet/CustomerServletAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/Back_End/src/lk/ijse/jsp/servlet/CustomerServletAPI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Back_End/src/lk/ijse/jsp/servlet/PlaceOrderServletAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/Back_End/src/lk/ijse/jsp/servlet/PlaceOrderServletAPI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Front_End/SPA.html" beforeDir="false" afterPath="$PROJECT_DIR$/Front_End/SPA.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Front_End/scripts/placeOrder.js" beforeDir="false" afterPath="$PROJECT_DIR$/Front_End/scripts/placeOrder.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -276,7 +272,8 @@
       <workItem from="1693145655769" duration="1182000" />
       <workItem from="1693191560754" duration="10466000" />
       <workItem from="1693214246650" duration="1242000" />
-      <workItem from="1693314741665" duration="5716000" />
+      <workItem from="1693314741665" duration="6379000" />
+      <workItem from="1693408427089" duration="1302000" />
     </task>
     <servers />
   </component>
