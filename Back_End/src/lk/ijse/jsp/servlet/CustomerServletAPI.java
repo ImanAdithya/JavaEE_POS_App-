@@ -98,11 +98,7 @@ public class CustomerServletAPI extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//
-//        String cusId = req.getParameter ("id");
-//        String cusName = req.getParameter ("name");
-//        String cusAddress = req.getParameter ("address");
-//        String cusSalary = req.getParameter ("salary");
+
         resp.addHeader ("Access-Control-Allow-Origin", "*");
 
         PrintWriter writer = resp.getWriter ();
