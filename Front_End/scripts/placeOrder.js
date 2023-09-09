@@ -7,6 +7,9 @@ function loadCustomerIDs() {
     $.ajax({
        url:'http://localhost:8080/javaEE_Pos/SPA/cus',
        method:'get',
+        headers:{
+            Auth:"user=admin,pass=admin"
+        },
        success:function (customers) {
            for (i in customers) {
                let cus=customers[i];
@@ -27,6 +30,9 @@ $("#selectCusID").change(function () {
     $.ajax({
         url:'http://localhost:8080/javaEE_Pos/SPA/cus',
         method:'get',
+        headers:{
+            Auth:"user=admin,pass=admin"
+        },
         success:function (customers) {
             for(i in customers){
                 let id=customers[i].id;
@@ -53,6 +59,9 @@ function loadItemIds() {
     $.ajax({
         url:'http://localhost:8080/javaEE_Pos/SPA/item',
         method:'get',
+        headers:{
+            Auth:"user=admin,pass=admin"
+        },
         success:function (items) {
             for(i in items){
                 let id=items[i].itemId;
@@ -69,6 +78,9 @@ $('#selectItemCode').change(function () {
     $.ajax({
         url:'http://localhost:8080/javaEE_Pos/SPA/item',
         method:'get',
+        headers:{
+            Auth:"user=admin,pass=admin"
+        },
         success:function (items) {
             for(i in items){
 
@@ -176,6 +188,9 @@ $('#btnSubmitOrder').click(function () {
         origin:"*",
         contentType: "application/json",
         data: JSON.stringify(order),
+        headers:{
+            Auth:"user=admin,pass=admin"
+        },
         success: function (resp) {
             alert("Order Succuss");
             console.log(resp.message);

@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
 
-@WebServlet(urlPatterns = {"/SPA/cus"})
+@WebServlet(urlPatterns = "/cus")
 public class CustomerServletAPI extends HttpServlet {
 
 

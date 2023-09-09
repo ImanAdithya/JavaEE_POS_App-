@@ -23,5 +23,8 @@
     <orderEntry type="library" exported="" name="mysql-connector-java-8.0.11" level="application" />
     <orderEntry type="library" exported="" name="javax.json-1.1.4" level="project" />
     <orderEntry type="library" exported="" name="javax.json-api-1.1.4" level="project" />
+    <orderEntry type="library" exported="" name="commons-dbcp2-2.10.0" level="project" />
+    <orderEntry type="library" exported="" name="commons-logging-1.2" level="project" />
+    <orderEntry type="library" exported="" name="commons-pool2-2.11.1" level="project" />
   </component>
 </module>

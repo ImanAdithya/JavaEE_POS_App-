@@ -3,7 +3,7 @@ function getAllCustomer() {
     $("#tblCustomer").empty();
 
     $.ajax({
-        url: 'http://localhost:8080/javaEE_Pos/SPA/cus',
+        url: 'http://localhost:8080/javaEE_Pos/cus',
         method: 'get',
         success:function (customer) {
             for (let i in customer) {
@@ -28,7 +28,7 @@ $("#btnGetAll").click(function () {
 $("#btnSaveCustomer").click(function () {
     let formData=$("#customerForm").serialize();
     $.ajax({
-        url:'http://localhost:8080/javaEE_Pos/SPA/cus',
+        url:'http://localhost:8080/javaEE_Pos/cus',
         method:'post',
         data:formData,
         success:function (res) {
@@ -56,7 +56,7 @@ $("#btnUpdate").click(function () {
     }
 
     $.ajax({
-        url:'http://localhost:8080/javaEE_Pos/SPA/cus',
+        url:'http://localhost:8080/javaEE_Pos/cus',
         method:'PUT',
         data: JSON.stringify(customerObj), // Convert the object to JSON string
         contentType: 'application/json',
@@ -73,7 +73,7 @@ $("#btnUpdate").click(function () {
 $("#btnCusDelete").click(function () {
     let cusId = $("#txtCustomerID").val();
     $.ajax({
-        url:'http://localhost:8080/javaEE_Pos/SPA/cus?id='+cusId,
+        url:'http://localhost:8080/javaEE_Pos/cus?id='+cusId,
         method:'DELETE',
         success:function () {
             getAllCustomer();

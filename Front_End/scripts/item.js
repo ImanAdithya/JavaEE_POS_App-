@@ -3,7 +3,7 @@ function getAllItem() {
     $("#tblItem").empty();
 
     $.ajax({
-        url: 'http://localhost:8080/javaEE_Pos/SPA/item',
+        url: 'http://localhost:8080/javaEE_Pos/item',
         method: 'get',
         success:function (item) {
             for (let i in item) {
@@ -29,7 +29,7 @@ $("#btnItemGetAll").click(function () {
 $("#btnSaveItem").click(function () {
     let formData=$("#ItemForm").serialize();
     $.ajax({
-        url:'http://localhost:8080/javaEE_Pos/SPA/item',
+        url:'http://localhost:8080/javaEE_Pos/item',
         method:'post',
         data:formData,
         success:function (res) {
@@ -55,7 +55,7 @@ $("#btnItemUpdate").click(function () {
         qty:itemQty
     }
     $.ajax({
-        url:'http://localhost:8080/javaEE_Pos/SPA/item',
+        url:'http://localhost:8080/javaEE_Pos/item',
         method:'PUT',
         data: JSON.stringify(itemObj), // Convert the object to JSON string
         contentType: 'application/json',
@@ -72,7 +72,7 @@ $("#btnItemUpdate").click(function () {
 $("#btnItemDelete").click(function () {
     let itemID = $("#txtItemID").val();
     $.ajax({
-        url:'http://localhost:8080/javaEE_Pos/SPA/item?id='+itemID,
+        url:'http://localhost:8080/javaEE_Pos/item?id='+itemID,
         method:'DELETE',
         success:function (res) {
             getAllItem()
